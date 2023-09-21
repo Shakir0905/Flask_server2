@@ -1,35 +1,60 @@
-# Text Improvement Engine
+# Веб-сервис на Flask для вывода персонализированных сообщений
 
-## Overview:
+## Задача
 
-The Text Improvement Engine is designed to analyze a given text and suggest improvements based on its similarity to a list of standardized phrases. These standardized phrases represent the ideal way certain concepts should be articulated. The goal is to align the input text closer to these standards, ensuring clarity and adherence to specific terminologies or jargons.
+Создать веб-сервис, который будет выводить персонализированные сообщения на основе GET-параметров `name` и `message`. Сервис должен быть доступен по URL вида:
 
-## Problem Statement:
+```
+http://xx.xx.xx.xx:8080/?name=Rekruto&message=Давай дружить
+```
 
-Given a text, the challenge was to identify phrases or sentences that could be better articulated using a set of predefined standardized phrases. The objective was not just to find exact matches but to identify semantic similarities, ensuring that the context and meaning of the original text are preserved while making the suggested improvements.
+При переходе по такому URL должно выводиться сообщение:
 
-## Solution:
+```
+Rekruto! Давай дружить!
+```
 
-To address this challenge, we employed the following approach:
+## Решение
 
-1. **Semantic Analysis with spaCy**: We utilized the `spaCy` library, which offers pre-trained models for semantic analysis. This allowed us to convert sentences and phrases into vector representations, facilitating the comparison of semantic similarities.
+Для решения задачи использован язык программирования Python и фреймворк Flask.
 
-2. **Cosine Similarity**: For each sentence in the input text, we computed its cosine similarity with each standardized phrase. This metric helped us determine how close the meaning of a given sentence is to any of the standardized phrases.
+### Установка зависимостей
 
-3. **Threshold-based Suggestions**: Based on a predefined similarity threshold, we suggested replacements for sentences or phrases in the input text. If the similarity score exceeded this threshold, the standardized phrase was recommended as a replacement.
+Перед началом работы установите Flask:
 
-## Installation:
+```bash
+pip install Flask
+```
 
-1. Install Python 3.
-2. Install the required libraries: `pip install spacy`
-3. Download the spaCy model: `python -m spacy download en_core_web_md`
-4. Run `main.py` to analyze the text.
+### Код
 
-## Usage:
+Создайте файл `app.py` и добавьте в него следующий код:
 
-1. Run `main.py`.
-2. Input the text you want to analyze when prompted.
-3. The program will display the original text, the suggested replacement, and the similarity score for each suggestion.
-4. Review the suggestions and decide which ones to incorporate into your text.
+```python
+from flask import Flask, request
 
-By using the Text Improvement Engine, users can ensure that their text aligns with standardized terminologies, enhancing clarity and professionalism.
+app = Flask(__name__)
+
+@app.route('/', methods=['GET'])
+def hello():
+    name = request.args.get('name', 'World')
+    message = request.args.get('message', 'Hello')
+    return f'{name}! {message}!'
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
+```
+
+### Запуск
+
+Запустите ваше приложение командой:
+
+```bash
+python app.py
+```
+
+## Результаты
+
+При переходе по URL вида `http://xx.xx.xx.xx:8080/?name=Rekruto&message=Давай дружить` на странице отображается сообщение "Rekruto! Давай дружить!".
+
+Здесь `xx.xx.xx.xx` — это IP-адрес вашего сервера.
